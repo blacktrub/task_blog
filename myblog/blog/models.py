@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 from django.db import models
+from django.utils import timezone
 
 
 class User(models.Model):
@@ -14,8 +15,8 @@ class User(models.Model):
 class Article(models.Model):
     article_title = models.CharField(max_length=100)
     article_text = models.TextField()
-    article_date_create = models.DateTimeField()
-    article_date_modify = models.DateTimeField()
+    article_date_create = models.DateTimeField(default=timezone.now)
+    article_date_modify = models.DateTimeField(default=timezone.now)
     article_access = models.BooleanField(default=True)
     article_autor = models.OneToOneField(User)
 
