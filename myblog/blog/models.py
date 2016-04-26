@@ -8,7 +8,6 @@ class User(models.Model):
     user_name = models.CharField(max_length=50)
     user_email = models.EmailField()
     user_password = models.CharField(max_length=50)
-    user_access = models.BooleanField(default=False)
     user_active = models.BooleanField(default=False)
 
 
