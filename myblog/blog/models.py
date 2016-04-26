@@ -2,13 +2,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django.utils import timezone
-
-
-class User(models.Model):
-    user_name = models.CharField(max_length=50)
-    user_email = models.EmailField()
-    user_password = models.CharField(max_length=50)
-    user_active = models.BooleanField(default=False)
+from django.models import User
 
 
 class Article(models.Model):
