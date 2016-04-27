@@ -10,15 +10,68 @@
     {% endblock title %}
     </title>
     <link href="{% static 'blog/css/bootstrap.css' %}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'blog/style.css' %}">
 </head>
 <body>
-    {% block post %}
-        {% if post_blog %}
-            {% for x in post_blog %}
-                {{ x.article_text }}
-            {% endfor %}
-        {% endif %}
-    {% endblock post %}
+    {% block header %}
+      <div class="container-fluit">
+          <div class="row">
+              <div class="navbar navbar-inverse navbar-fixed-top">
+                  <div class="container">
+                      <div class="navbar-header">
+                          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#responsive-menu">
+                              <span class="sr-only">Открыть навигацию</span>
+                              <span class="icon-bar"></span>
+                              <span class="icon-bar"></span>
+                              <span class="icon-bar"></span>
+                          </button>
+                      </div>
+                      <div class="collapse navbar-collapse" id="responsive-menu">
+                          <ul class="nav navbar-nav">
+                              <li><a href="{% url 'blog:home' %}">Блог</a></li>
+                          </ul>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+    {% endblock header %}
+
+    <div class="container blog-post">
+        <div class="row">
+            <div class="col-lg-8 col-md-8">
+                {% block post %}
+                    {% if post_blog %}
+                        {% for x in post_blog %}
+                            <div>
+                                <h2 class="article-title">
+                                    <a class="article-title" href="{% url 'blog:full' x.id %}"> {{ x.article_title }} </a>
+                                </h2>
+                            </div>
+                            <h6>
+                                {% if x.article_date_create == x.article_date_modify %}
+                                    <b>Создан:</b> {{ x.article_date_create }} 
+                                {% else %}
+                                    <b>Создан:</b> {{ x.article_date_create }} 
+                                    <b>Последнее изменение:</b> {{ x.article_date_modify }} 
+                                {% endif %}
+                                <b>Автор:</b> {{ x.article_autor }} 
+                                <b>Категории:</b> {{ x.article_tag }} 
+                            </h6>
+                            <div class="jumbotron">
+                                <p class="text-justify">
+                                    {{ x.article_text }}
+                                </p>
+                                <a href="{% url 'blog:full' x.id %}">Читать далее...</a>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endblock post %}
+            </div>
+
+        </div>
+    </div>
+
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="{% static "blog/js/bootstrap.js" %}"></script>

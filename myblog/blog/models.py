@@ -8,6 +8,9 @@ from django.contrib.auth.models import User
 class Tags(models.Model):
     tags_name = models.CharField(max_length=50)
 
+    def __str__(self):
+        return self.tags_name
+
 
 class Article(models.Model):
     article_title = models.CharField(max_length=100)
@@ -17,3 +20,9 @@ class Article(models.Model):
     article_access = models.BooleanField(default=True)
     article_autor = models.OneToOneField(User)
     article_tag = models.ManyToManyField(Tags)
+
+    def __str__(self):
+        return self.article_title
+
+    def get(self, article_tag):
+        return self.article_tag.all()
