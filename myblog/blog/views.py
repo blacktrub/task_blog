@@ -9,7 +9,7 @@ class HomeView(generic.ListView):
     context_object_name = 'post_blog'
 
     def get_queryset(self):
-        return Article.objects.order_by('-article_date_create').all()
+        return Article.objects.order_by('-article_date_create')[:10]
 
 
 class FullView(generic.DetailView):

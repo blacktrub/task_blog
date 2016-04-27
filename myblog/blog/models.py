@@ -2,7 +2,11 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django.utils import timezone
-from django.models import User
+from django.contrib.auth.models import User
+
+
+class Tags(models.Model):
+    tags_name = models.CharField(max_length=50)
 
 
 class Article(models.Model):
@@ -12,8 +16,4 @@ class Article(models.Model):
     article_date_modify = models.DateTimeField(default=timezone.now)
     article_access = models.BooleanField(default=True)
     article_autor = models.OneToOneField(User)
-
-
-class Tags(models.Model):
-    tags_name = models.CharField(max_length=50)
-    tags_key = models.ForeignKey(Article)
+    article_tag = models.ManyToManyField(Tags)

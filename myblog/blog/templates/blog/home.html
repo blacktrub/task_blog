@@ -1,0 +1,49 @@
+{% load staticfiles %}
+
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <title>
+    {% block title %}
+        Блог
+    {% endblock title %}
+    </title>
+    <link href="{% static 'blog/css/bootstrap.css' %}" rel="stylesheet">
+</head>
+<body>
+    {% block post %}
+        {% if post_blog %}
+            {% for x in post_blog %}
+                {{ x.article_text }}
+            {% endfor %}
+        {% endif %}
+    {% endblock post %}
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="{% static "blog/js/bootstrap.js" %}"></script>
+
+    {% block footer %}
+          <div class="blog-footer">
+        <a href="https://vk.com/blacktrub">
+            <img src="{% static "blog/image/ico-vkontakte.png" %}">
+        </a>
+        <a href="https://twitter.com/BlackTrub">
+            <img src="{% static "blog/image/ico-twitter.png" %}">
+        </a>
+        <a href="https://www.facebook.com/blacktrub">
+            <img src="{% static "blog/image/ico-facebook.png" %}">
+        </a>
+        <a href="https://www.github.com/blacktrub">
+            <img src="{% static "blog/image/github.png" %}">
+        </a>
+        <p>
+            <b>Дмитрий Антонов ©</b>
+        </p>
+        <p>
+            <b>2016</b>
+        </p>
+    </div>
+    {% endblock footer %}  
+</body>
+</html>
