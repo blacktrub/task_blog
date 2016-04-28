@@ -23,6 +23,3 @@ class Article(models.Model):
 
     def __str__(self):
         return self.article_title
-
-    def get(self, article_tag):
-        return self.article_tag.all()

@@ -1,0 +1,35 @@
+{% extends "blog/home.html" %}
+
+{% block post %}
+    {% if fullpost_blog %}
+        <div class="container blog-post">
+            <div class="row">
+                <div class="col-lg-8 col-md-8">
+                    <div>
+                        <h2 class="article-title">
+                            <a class="article-title"> {{ fullpost_blog.article_title }} </a>
+                        </h2>
+                    </div>
+                    <h6>
+                        {% if fullpost_blog.article_date_create == fullpost_blog.article_date_modify %}
+                            <b>Создан:</b> {{ fullpost_blog.article_date_create }} 
+                        {% else %}
+                            <b>Создан:</b> {{ fullpost_blog.article_date_create }} 
+                            <b>Последнее изменение:</b> {{ fullpost_blog.article_date_modify }} 
+                        {% endif %}
+                        <b>Автор:</b> {{ fullpost_blog.article_autor }} 
+                        <b>Категории:</b> 
+                        {% for tag in fullpost_blog.article_tag.all %}
+                            {{ tag }}
+                        {% endfor %}
+                    </h6>
+                    <div class="jumbotron">
+                        <p class="text-justify">
+                            {{ fullpost_blog.article_text }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock post %}
