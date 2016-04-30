@@ -28,6 +28,9 @@
         <button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
         <input type="hidden" name="next" value="{{ next|escape }}" />
       </form>
+      <form action="{% url 'blog:home' %}">
+        <input type="submit" value="На главную" class="btn btn-lg btn-primary btn-block">
+      </form>
     </div>
   {% endblock %}
 
