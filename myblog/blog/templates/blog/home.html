@@ -32,6 +32,7 @@
                           <ul class="nav navbar-nav">
                               <li><a href="{% url 'blog:home' %}">Блог</a></li>
                               <li><a href="{% url 'blog:login' %}">Войти</a></li>
+                              <li>Вы зашли как: {{user.username}}</li>
                           </ul>
                       </div>
                   </div>
