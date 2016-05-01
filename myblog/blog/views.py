@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 from django.views import generic
 from .models import Article
+from .forms import RegisterForm
+from django.views.generic.edit import FormView
 
 
 class HomeView(generic.ListView):
@@ -16,3 +18,14 @@ class FullView(generic.DetailView):
     template_name = 'blog/full.html'
     model = Article
     context_object_name = 'fullpost_blog'
+
+
+class RegisterView(FormView):
+    template_name = 'blog/reg.html'
+    form_class = RegisterForm
+    success_url = '/login'
+
+    def form_valid(self, form):
+        form.clean_password2()
+        form.save()
+        return super(RegisterView, self).form_valid(form)

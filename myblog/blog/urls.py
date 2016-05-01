@@ -4,10 +4,12 @@ from django.conf.urls import url
 from . import views, forms
 from django.contrib.auth.views import login, logout
 
+
 urlpatterns = [
     url(r'^$', views.HomeView.as_view(), name='home'),
     url(r'^(?P<pk>[0-9]+)/$', views.FullView.as_view(), name='full'),
-    url(r'^login/$', login, {'template_name': 'blog/login.html',
-        'authentication_form': forms.LoginForm}, name='login'),
+    url(r'^login/$', login, {'template_name': 'blog/login.html'},
+        name='login'),
     url(r'^logout/$', logout, {'next_page': '/'}, name='logout'),
+    url(r'^reg/$', views.RegisterView.as_view(), name='reg'),
 ]
