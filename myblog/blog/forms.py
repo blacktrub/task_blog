@@ -7,9 +7,11 @@ from django import forms
 
 
 class RegisterForm(ModelForm):
+    error_css_class = 'error'
+    required_css_class = 'required'
     error_messages = {
         'password_mismatch': "Пароли не совпадают",
-        'invalid': "Пользователь с таким e-mail уже существует",
+        'email_error': "Пользователь с таким e-mail уже существует",
     }
     password1 = forms.CharField(
         label="Пароль",
@@ -20,7 +22,6 @@ class RegisterForm(ModelForm):
         label="Повторите пароль",
         strip=False,
         widget=forms.PasswordInput,
-        help_text="Введите одинаковые пароли"
         )
 
     class Meta:
@@ -31,8 +32,8 @@ class RegisterForm(ModelForm):
         email = self.cleaned_data["email"]
         if email and User.objects.filter(email=email).exists():
             raise forms.ValidationError(
-                self.error_messages['invalid'],
-                code='invalid',
+                self.error_messages['email_error'],
+                code='email_error',
                 )
         return email
 
@@ -52,6 +53,7 @@ class RegisterForm(ModelForm):
         user = super(RegisterForm, self).save(commit=False)
         user.email = self.cleaned_data["email"]
         user.set_password(self.cleaned_data["password1"])
+        user.is_active = False
         if commit:
             user.save()
         return user

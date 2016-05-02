@@ -1,5 +1,28 @@
-<form action="" method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <input type="submit" value="Send message" />
-</form>
+{% extends "blog/login.html" %}
+
+{% block title %}
+  Регистрация
+{% endblock title %}
+
+{% block content %}
+  <div class="form-signin">
+    <form action="" method="post" class="form-sigin">
+    <h2 class="form-sigin-heading">Регистрация</h2>
+      {% csrf_token %}
+      <input id="id_username" maxlength="30" name="username" type="text" placeholder="Логин" class="form-control style-margin" required autofocus/>
+      <input id="id_email" maxlength="254" name="email" type="email" placeholder="Адрес электронной почты" class="form-control style-margin" required />
+      <input id="id_password1" name="password1" type="password" placeholder="Пароль" class="form-control style-margin" required />
+      <input id="id_password2" name="password2" type="password" placeholder="Повторите пароль" class="form-control style-margin" required />
+
+      <button class="btn btn-lg btn-primary btn-block" type="submit" >Регистрация</button>
+    </form>
+    <form action="{% url 'blog:home' %}">
+      <input type="submit" value="На главную" class="btn btn-lg btn-primary btn-block style-margin">
+    </form>
+
+    {% if form.errors %}
+      {{ form.errors }}
+    {% endif %}
+
+  </div>
+{% endblock content %}
