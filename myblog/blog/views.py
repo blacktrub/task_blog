@@ -26,6 +26,7 @@ class RegisterView(FormView):
     success_url = '/login'
 
     def form_valid(self, form):
+        form.clean_email()
         form.clean_password2()
         form.save()
         return super(RegisterView, self).form_valid(form)

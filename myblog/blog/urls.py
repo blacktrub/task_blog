@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 from django.conf.urls import url
-from . import views, forms
+from . import views
 from django.contrib.auth.views import login, logout
 
 

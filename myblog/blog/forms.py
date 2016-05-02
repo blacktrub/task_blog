@@ -9,6 +9,7 @@ from django import forms
 class RegisterForm(ModelForm):
     error_messages = {
         'password_mismatch': "Пароли не совпадают",
+        'invalid': "Пользователь с таким e-mail уже существует",
     }
     password1 = forms.CharField(
         label="Пароль",
@@ -21,15 +22,19 @@ class RegisterForm(ModelForm):
         widget=forms.PasswordInput,
         help_text="Введите одинаковые пароли"
         )
-    email = forms.EmailField(
-        label="Адрес электронной почты",
-        strip=False,
-        widget=forms.EmailInput,
-        )
 
     class Meta:
         model = User
-        fields = ("username",)
+        fields = ("username", "email",)
+
+    def clean_email(self):
+        email = self.cleaned_data["email"]
+        if email and User.objects.filter(email=email).exists():
+            raise forms.ValidationError(
+                self.error_messages['invalid'],
+                code='invalid',
+                )
+        return email
 
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")
