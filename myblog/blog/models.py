@@ -23,3 +23,8 @@ class Article(models.Model):
 
     def __str__(self):
         return self.article_title
+
+    class Meta:
+        permissions = (
+            ("can_view_privatepost", "Может просматривать приватный пост"),
+            )

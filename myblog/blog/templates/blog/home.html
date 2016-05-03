@@ -74,6 +74,11 @@
                                 {% for tag in x.article_tag.all %}
                                     {{ tag }}
                                 {% endfor %}
+                                {% if x.article_access %}
+                                  <b>Открытый пост</b>
+                                {% else %}
+                                  <b>Закрытый пост</b>
+                                {% endif %}
                             </h6>
                             <div class="jumbotron">
                                 <p class="text-justify">

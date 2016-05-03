@@ -4,6 +4,8 @@ from django.views import generic
 from .models import Article
 from .forms import RegisterForm
 from django.views.generic.edit import FormView
+from django.shortcuts import get_object_or_404, render
+from .decorators import login_required
 
 
 class HomeView(generic.ListView):
@@ -11,13 +13,16 @@ class HomeView(generic.ListView):
     context_object_name = 'post_blog'
 
     def get_queryset(self):
-        return Article.objects.order_by('-article_date_create')[:10]
+        return Article.objects.order_by('-article_date_create').all()
 
 
-class FullView(generic.DetailView):
-    template_name = 'blog/full.html'
-    model = Article
-    context_object_name = 'fullpost_blog'
+def FullView(request, pk):
+    obj = get_object_or_404(Article, pk=pk)
+
+    @login_required(a=obj.article_access)
+    def view(request, obj):
+        return render(request, 'blog/full.html', {'fullpost_blog': obj})
+    view(request, obj)
 
 
 class RegisterView(FormView):
