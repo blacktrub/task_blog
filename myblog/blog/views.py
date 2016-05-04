@@ -5,7 +5,7 @@ from .models import Article
 from .forms import RegisterForm
 from django.views.generic.edit import FormView
 from django.shortcuts import get_object_or_404, render
-from .decorators import login_required
+from .decorators import access_private_post
 
 
 class HomeView(generic.ListView):
@@ -19,10 +19,11 @@ class HomeView(generic.ListView):
 def FullView(request, pk):
     obj = get_object_or_404(Article, pk=pk)
 
-    @login_required(a=obj.article_access)
+    @access_private_post(url='/login', access=obj.article_access)
     def view(request, obj):
         return render(request, 'blog/full.html', {'fullpost_blog': obj})
-    view(request, obj)
+
+    return view(request, obj)
 
 
 class RegisterView(FormView):
