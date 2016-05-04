@@ -19,7 +19,8 @@ class HomeView(generic.ListView):
 def FullView(request, pk):
     obj = get_object_or_404(Article, pk=pk)
 
-    @access_private_post(url='/login', access=obj.article_access)
+    @access_private_post(url='/access_error_to_post',
+                         access=obj.article_access)
     def view(request, obj):
         return render(request, 'blog/full.html', {'fullpost_blog': obj})
 
@@ -36,3 +37,7 @@ class RegisterView(FormView):
         form.clean_password2()
         form.save()
         return super(RegisterView, self).form_valid(form)
+
+
+def Access_error_to_post(request):
+    return render(request, 'blog/access_error_to_post.html')

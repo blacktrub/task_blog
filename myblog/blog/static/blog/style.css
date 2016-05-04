@@ -1,5 +1,5 @@
  body {
-    margin: 100px;
+    margin-top: 100px;
   }
 
  .article-title a, .article-title a:visited {
@@ -15,4 +15,9 @@
 
 p.text-justify {
     font-size: 15px;
+}
+
+.text-center {
+    text-align: center;
+    padding-bottom: 120px;
 }

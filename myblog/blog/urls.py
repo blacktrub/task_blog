@@ -12,4 +12,5 @@ urlpatterns = [
         name='login'),
     url(r'^logout/$', logout, {'next_page': '/'}, name='logout'),
     url(r'^reg/$', views.RegisterView.as_view(), name='reg'),
+    url(r'^access_error_to_post/$', views.Access_error_to_post),
 ]
