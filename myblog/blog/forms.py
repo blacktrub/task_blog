@@ -2,9 +2,18 @@
 # -*- coding: utf-8 -*-
 from django.forms import ModelForm
 from django.contrib.auth.models import User
+from .models import Article
 from django.contrib.auth import password_validation
 from django import forms
 
+'''
+class EditForm(ModelForm):
+
+    class Meta:
+        model = Article
+        fields = ("article_title", "article_text",
+                  "article_access", "article_tag")
+'''
 
 class RegisterForm(ModelForm):
     error_css_class = 'error'

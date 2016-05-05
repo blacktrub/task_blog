@@ -6,6 +6,9 @@ from .forms import RegisterForm
 from django.views.generic.edit import FormView
 from django.shortcuts import get_object_or_404, render
 from .decorators import access_private_post
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
 
 
 class HomeView(generic.ListView):
@@ -41,3 +44,23 @@ class RegisterView(FormView):
 
 def Access_error_to_post(request):
     return render(request, 'blog/access_error_to_post.html')
+
+
+class EditView(generic.ListView):
+    template_name = 'blog/edit.html'
+    context_object_name = 'edit_post'
+
+    def get_queryset(self):
+        return Article.objects.all()
+
+    @method_decorator(login_required(redirect_field_name='',
+                      login_url='/access_error_to_post'))
+    def dispatch(self, request, *args, **kwargs):
+        return super(EditView, self).dispatch(request, *args, **kwargs)
+
+
+@login_required(redirect_field_name='',
+                login_url='/access_error_to_post')
+def DeletePost(request, pk):
+    Article.objects.get(pk=pk).delete()
+    return HttpResponseRedirect('/edit')
