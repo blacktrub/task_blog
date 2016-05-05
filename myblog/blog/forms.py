@@ -6,14 +6,26 @@ from .models import Article
 from django.contrib.auth import password_validation
 from django import forms
 
-'''
-class EditForm(ModelForm):
+
+class NewPostForm(ModelForm):
 
     class Meta:
         model = Article
         fields = ("article_title", "article_text",
                   "article_access", "article_tag")
-'''
+
+    def save(self, commit=True):
+        article = super(NewPostForm, self).save(commit=False)
+        article.article_title = self.cleaned_data["article_title"]
+        article.article_text = self.cleaned_data["article_text"]
+        article.article_access = self.cleaned_data["article_access"]
+        article.article_tag = self.cleaned_data["article_tag"]
+        article.article_autor = self.user.username
+
+        if commit:
+            article.save()
+        return article
+
 
 class RegisterForm(ModelForm):
     error_css_class = 'error'

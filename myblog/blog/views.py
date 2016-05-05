@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from django.views import generic
 from .models import Article
-from .forms import RegisterForm
+from .forms import RegisterForm, NewPostForm
 from django.views.generic.edit import FormView
 from django.shortcuts import get_object_or_404, render
 from .decorators import access_private_post
@@ -30,18 +30,6 @@ def FullView(request, pk):
     return view(request, obj)
 
 
-class RegisterView(FormView):
-    template_name = 'blog/reg.html'
-    form_class = RegisterForm
-    success_url = '/login'
-
-    def form_valid(self, form):
-        form.clean_email()
-        form.clean_password2()
-        form.save()
-        return super(RegisterView, self).form_valid(form)
-
-
 def Access_error_to_post(request):
     return render(request, 'blog/access_error_to_post.html')
 
@@ -62,5 +50,27 @@ class EditView(generic.ListView):
 @login_required(redirect_field_name='',
                 login_url='/access_error_to_post')
 def DeletePost(request, pk):
-    Article.objects.get(pk=pk).delete()
+    Article.objects.get(pk=pk).order_by('-article_date_create').delete()
     return HttpResponseRedirect('/edit')
+
+
+class RegisterView(FormView):
+    template_name = 'blog/reg.html'
+    form_class = RegisterForm
+    success_url = '/login'
+
+    def form_valid(self, form):
+        form.clean_email()
+        form.clean_password2()
+        form.save()
+        return super(RegisterView, self).form_valid(form)
+
+
+class NewPostView(FormView):
+    template_name = 'blog/newpost.html'
+    form_class = NewPostForm
+    success_url = '/'
+
+    def form_valid(self, form, request):
+        form.save(request=request)
+        return super(NewPostForm, self).form_valid(form)
