@@ -55,7 +55,10 @@ class EditView(generic.ListView):
                 login_url='/access_error_to_post')
 def DeletePost(request, pk):
     article = Article.objects.get(pk=pk)
-    if request.user == article.article_autor:
+    if request.user.is_superuser:
+        article.delete()
+        return HttpResponseRedirect('/edit')
+    elif request.user == article.article_autor:
         article.delete()
         return HttpResponseRedirect('/edit')
     return HttpResponseRedirect('/access_error_to_modify')
