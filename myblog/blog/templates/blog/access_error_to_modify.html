@@ -1,0 +1,16 @@
+{% extends "blog/home.html" %}
+{% load staticfiles %}
+
+{% block title %}
+    Ошибка доступа
+{% endblock title %}
+
+{% block post %}
+    <div class="container">
+        <div class="text-center">
+            <h1>Упс! Вы не имеете доступа к изменению чужих статей</h1>
+            <p class="lead">Такая власть есть только у админа :)</p>
+            <p class="lead"><a href="{% url 'blog:home' %}">На главную</a></p>
+        </div>
+    </div>
+{% endblock post %}

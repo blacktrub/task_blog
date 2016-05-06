@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 from django.views import generic
 from .models import Article, Tags
-from django.contrib.auth.models import User
 from .forms import RegisterForm, NewPostForm
 from django.views.generic.edit import FormView
 from django.shortcuts import get_object_or_404, render
@@ -35,6 +34,10 @@ def Access_error_to_post(request):
     return render(request, 'blog/access_error_to_post.html')
 
 
+def Access_error_to_modify(request):
+    return render(request, 'blog/access_error_to_modify.html')
+
+
 class EditView(generic.ListView):
     template_name = 'blog/edit.html'
     context_object_name = 'edit_post'
@@ -51,8 +54,11 @@ class EditView(generic.ListView):
 @login_required(redirect_field_name='',
                 login_url='/access_error_to_post')
 def DeletePost(request, pk):
-    Article.objects.get(pk=pk).order_by('-article_date_create').delete()
-    return HttpResponseRedirect('/edit')
+    article = Article.objects.get(pk=pk)
+    if request.user == article.article_autor:
+        article.delete()
+        return HttpResponseRedirect('/edit')
+    return HttpResponseRedirect('/access_error_to_modify')
 
 
 class RegisterView(FormView):
