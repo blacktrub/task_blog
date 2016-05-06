@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 from django.views import generic
-from .models import Article
+from .models import Article, Tags
+from django.contrib.auth.models import User
 from .forms import RegisterForm, NewPostForm
 from django.views.generic.edit import FormView
 from django.shortcuts import get_object_or_404, render
@@ -62,7 +63,7 @@ class RegisterView(FormView):
     def form_valid(self, form):
         form.clean_email()
         form.clean_password2()
-        form.save()
+        form.save(commit=False)
         return super(RegisterView, self).form_valid(form)
 
 
@@ -71,6 +72,24 @@ class NewPostView(FormView):
     form_class = NewPostForm
     success_url = '/'
 
-    def form_valid(self, form, request):
-        form.save(request=request)
-        return super(NewPostForm, self).form_valid(form)
+    def form_valid(self, form):
+        f = form.save(commit=False)
+        f.article_title = form.cleaned_data["article_title"]
+        f.article_text = form.cleaned_data["article_text"]
+        f.article_access = form.cleaned_data["article_access"]
+        f.article_autor = self.request.user
+        f.save()
+
+        tags = form.cleaned_data['article_tag']
+        for tag in range(len(tags)):
+            tag_add = Tags.objects.get(tags_name=tags[tag])
+            f.article_tag.add(tag_add)
+
+        form.save_m2m()
+
+        return HttpResponseRedirect('/edit')
+
+    @method_decorator(login_required(redirect_field_name='',
+                      login_url='/access_error_to_post'))
+    def dispatch(self, request, *args, **kwargs):
+        return super(NewPostForm, self).dispatch(request, *args, **kwargs)

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from django.forms import ModelForm
 from django.contrib.auth.models import User
-from .models import Article
+from .models import Article, Tags
 from django.contrib.auth import password_validation
 from django import forms
 
@@ -16,14 +16,15 @@ class NewPostForm(ModelForm):
 
     def save(self, commit=True):
         article = super(NewPostForm, self).save(commit=False)
+        '''
         article.article_title = self.cleaned_data["article_title"]
         article.article_text = self.cleaned_data["article_text"]
         article.article_access = self.cleaned_data["article_access"]
-        article.article_tag = self.cleaned_data["article_tag"]
-        article.article_autor = self.user.username
+        '''
 
         if commit:
             article.save()
+
         return article
 
 
