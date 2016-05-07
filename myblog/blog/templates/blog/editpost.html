@@ -1,4 +1,35 @@
-<form action="" method="post">{% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Update" />
-</form>
+{% extends "blog/login.html" %}
+
+{% block title %}
+    Новый пост
+{% endblock title %}
+
+{% block content %}
+    <div class="container">
+        <form action='.' method='post' class="bs-docs-example form-inline" role="form">
+            {% csrf_token %}
+            <h2 class="form-signin-heading">Изменить пост</h2>
+
+            <p><label for="id_article_title">Заголовок статьи</label></p>
+            <p><input value="{{form.article_title.value}}" id="id_article_title" maxlength="100" name="article_title" type="text" required autofocus/></p>
+
+            <p><label for="id_article_text">Основной текст:</label></p>
+            <p><textarea cols="40" id="id_article_text" name="article_text" rows="10" required>{{form.article_text.value}}</textarea></p>
+
+            <p><label for="id_article_access">Статья в открытом доступе:</label>
+            <input id="id_article_access" name="article_access" type="checkbox" 
+            {% if form.article_access.value %}
+                checked 
+            {% endif %}/></p>
+
+            <p><label for="id_article_tags">Теги статьи:</label>
+            {{ form.article_tag }}</p>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+                <button href="{% url 'blog:home' %}" type="button" class="btn">Отменить</button>
+            </div>
+            {{form.errors}}
+        </form>
+    </div>
+{% endblock content %}

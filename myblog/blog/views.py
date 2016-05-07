@@ -3,13 +3,13 @@
 from django.views import generic
 from .models import Article, Tags
 from .forms import RegisterForm, NewPostForm, EditPostForm
-from django.views.generic.edit import FormView
-from django.shortcuts import get_object_or_404, render
+from django.views.generic.edit import FormView, UpdateView
+from django.shortcuts import get_object_or_404, render, redirect
 from .decorators import access_private_post
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from django.views.generic.edit import UpdateView
+from django.utils import timezone
 
 
 class HomeView(generic.ListView):
@@ -80,7 +80,6 @@ class RegisterView(FormView):
 class NewPostView(FormView):
     template_name = 'blog/newpost.html'
     form_class = NewPostForm
-    success_url = '/'
 
     def form_valid(self, form):
         f = form.save(commit=False)
@@ -102,11 +101,22 @@ class NewPostView(FormView):
     @method_decorator(login_required(redirect_field_name='',
                       login_url='/access_error_to_post'))
     def dispatch(self, request, *args, **kwargs):
-        return super(NewPostForm, self).dispatch(request, *args, **kwargs)
+        return super(NewPostView, self).dispatch(request, *args, **kwargs)
 
 
 class EditPostView(UpdateView):
     form_class = EditPostForm
     template_name = 'blog/editpost.html'
     model = Article
-    success_url = '/'
+    success_url = '/edit'
+
+    def form_valid(self, form):
+        f = form.save(commit=False)
+        f.article_date_modify = timezone.now()
+        f.save()
+        return redirect(self.get_success_url())
+
+    @method_decorator(login_required(redirect_field_name='',
+                      login_url='/access_error_to_post'))
+    def dispatch(self, request, *args, **kwargs):
+        return super(EditPostView, self).dispatch(request, *args, **kwargs)

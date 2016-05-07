@@ -24,10 +24,8 @@ class NewPostForm(ModelForm):
 
     def save(self, commit=True):
         article = super(NewPostForm, self).save(commit=False)
-
         if commit:
             article.save()
-
         return article
 
 
