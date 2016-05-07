@@ -8,6 +8,8 @@ from django.contrib.auth.views import login, logout
 urlpatterns = [
     url(r'^$', views.HomeView.as_view(), name='home'),
     url(r'^(?P<pk>[0-9]+)/$', views.FullView, name='full'),
+    url(r'^edit/(?P<pk>[0-9]+)/$', views.EditPostView.as_view(),
+        name='editpost'),
     url(r'^login/$', login, {'template_name': 'blog/login.html'},
         name='login'),
     url(r'^logout/$', logout, {'next_page': '/'}, name='logout'),

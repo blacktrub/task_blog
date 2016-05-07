@@ -2,9 +2,17 @@
 # -*- coding: utf-8 -*-
 from django.forms import ModelForm
 from django.contrib.auth.models import User
-from .models import Article, Tags
+from .models import Article
 from django.contrib.auth import password_validation
 from django import forms
+
+
+class EditPostForm(ModelForm):
+
+    class Meta:
+        model = Article
+        fields = ("article_title", "article_text",
+                  "article_access", "article_tag")
 
 
 class NewPostForm(ModelForm):
@@ -16,11 +24,6 @@ class NewPostForm(ModelForm):
 
     def save(self, commit=True):
         article = super(NewPostForm, self).save(commit=False)
-        '''
-        article.article_title = self.cleaned_data["article_title"]
-        article.article_text = self.cleaned_data["article_text"]
-        article.article_access = self.cleaned_data["article_access"]
-        '''
 
         if commit:
             article.save()

@@ -2,13 +2,14 @@
 # -*- coding: utf-8 -*-
 from django.views import generic
 from .models import Article, Tags
-from .forms import RegisterForm, NewPostForm
+from .forms import RegisterForm, NewPostForm, EditPostForm
 from django.views.generic.edit import FormView
 from django.shortcuts import get_object_or_404, render
 from .decorators import access_private_post
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
+from django.views.generic.edit import UpdateView
 
 
 class HomeView(generic.ListView):
@@ -102,3 +103,10 @@ class NewPostView(FormView):
                       login_url='/access_error_to_post'))
     def dispatch(self, request, *args, **kwargs):
         return super(NewPostForm, self).dispatch(request, *args, **kwargs)
+
+
+class EditPostView(UpdateView):
+    form_class = EditPostForm
+    template_name = 'blog/editpost.html'
+    model = Article
+    success_url = '/'
