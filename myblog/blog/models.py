@@ -23,3 +23,8 @@ class Article(models.Model):
 
     def __str__(self):
         return self.article_title
+
+
+class CountArticle(models.Model):
+    user = models.OneToOneField(User)
+    count = models.ManyToManyField(Article)

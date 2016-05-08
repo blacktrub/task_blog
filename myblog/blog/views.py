@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 from django.views import generic
-from .models import Article, Tags
+from .models import Article, Tags, CountArticle
 from .forms import RegisterForm, NewPostForm, EditPostForm
-from django.views.generic.edit import FormView, UpdateView
+from django.views.generic.edit import FormView, UpdateView, CreateView
 from django.shortcuts import get_object_or_404, render, redirect
 from .decorators import access_private_post
 from django.utils.decorators import method_decorator
@@ -120,3 +120,9 @@ class EditPostView(UpdateView):
                       login_url='/access_error_to_post'))
     def dispatch(self, request, *args, **kwargs):
         return super(EditPostView, self).dispatch(request, *args, **kwargs)
+
+
+class CreateCount(CreateView):
+    model = CountArticle
+    fields = ['user', 'count']
+    template_name = 'blog/count.html'

@@ -30,6 +30,8 @@
                               <li><a>Вы зашли как: {{user.username}}</a></li>
                               <li><a href="{% url 'blog:logout' %}">Выйти</a></li>
                               <li class="divider"></li>
+                              <li><a>Непрочитанных постов: {{total_count}}</a></li>
+                              <li class="divider"></li>
                             {% else %}
                               <li><a href="{% url 'blog:login' %}">Войти</a></li>
                               <li><a href="{% url 'blog:reg' %}">Регистрация</a></li>
