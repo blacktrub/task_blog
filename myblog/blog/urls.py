@@ -19,5 +19,4 @@ urlpatterns = [
     url(r'^edit/$', views.EditView.as_view(), name='edit'),
     url(r'^edit/delete/(?P<pk>[0-9]+)/$', views.DeletePost, name='delete'),
     url(r'^edit/newpost/$', views.NewPostView.as_view(), name='newpost'),
-    url(r'^count/$', views.CreateCount.as_view())
 ]

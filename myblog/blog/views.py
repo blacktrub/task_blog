@@ -73,7 +73,7 @@ class RegisterView(FormView):
     def form_valid(self, form):
         form.clean_email()
         form.clean_password2()
-        form.save(commit=False)
+        form.save()
         return super(RegisterView, self).form_valid(form)
 
 
@@ -93,6 +93,10 @@ class NewPostView(FormView):
         for tag in range(len(tags)):
             tag_add = Tags.objects.get(tags_name=tags[tag])
             f.article_tag.add(tag_add)
+
+        article = Article.objects.get(article_title=form.cleaned_data["article_title"])
+        count = CountArticle.objects.get(user=self.request.user)
+        article.countarticle_set.add(count)
 
         form.save_m2m()
 
@@ -120,9 +124,3 @@ class EditPostView(UpdateView):
                       login_url='/access_error_to_post'))
     def dispatch(self, request, *args, **kwargs):
         return super(EditPostView, self).dispatch(request, *args, **kwargs)
-
-
-class CreateCount(CreateView):
-    model = CountArticle
-    fields = ['user', 'count']
-    template_name = 'blog/count.html'

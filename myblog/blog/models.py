@@ -20,11 +20,13 @@ class Article(models.Model):
     article_access = models.BooleanField(default=True)
     article_autor = models.ForeignKey(User)
     article_tag = models.ManyToManyField(Tags)
+    article_count = models.ManyToManyField('CountArticle')
 
     def __str__(self):
         return self.article_title
 
 
 class CountArticle(models.Model):
+    id = models.AutoField(primary_key=True)
     user = models.OneToOneField(User)
     count = models.ManyToManyField(Article)
