@@ -21,3 +21,7 @@ p.text-justify {
     text-align: center;
     padding-bottom: 50px;
 }
+
+.messages li.error { 
+    background-color: red; 
+}

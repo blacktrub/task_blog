@@ -29,3 +29,12 @@ class Article(models.Model):
 class CountArticle(models.Model):
     user = models.OneToOneField(User)
     count_article = models.ManyToManyField(Article)
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User)
+    activation_key = models.CharField(max_length=40, blank=True)
+    key_expires = models.DateTimeField(default=timezone.now)
+
+    def __srt__(self):
+        return self.user.username

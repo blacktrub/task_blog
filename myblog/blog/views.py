@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 from django.views import generic
-from .models import Article, Tags, CountArticle
+from .models import Article, Tags, CountArticle, UserProfile
+from django.contrib.auth.models import User
 from .forms import RegisterForm, NewPostForm, EditPostForm
 from django.views.generic.edit import FormView, UpdateView
 from django.shortcuts import get_object_or_404, render, redirect
@@ -42,6 +43,18 @@ def Access_error_to_modify(request):
     return render(request, 'blog/access_error_to_modify.html')
 
 
+def error_expired(request):
+    return render(request, 'blog/error_expired.html')
+
+
+def success_register_account(request):
+    return render(request, 'blog/success_register_account.html')
+
+
+def success_activated_account(request):
+    return render(request, 'blog/success_activated_account.html')
+
+
 class EditView(generic.ListView):
     template_name = 'blog/edit.html'
     context_object_name = 'edit_post'
@@ -74,13 +87,49 @@ def DeletePost(request, pk):
 class RegisterView(FormView):
     template_name = 'blog/reg.html'
     form_class = RegisterForm
-    success_url = '/login'
+    success_url = '/success_register_account'
 
     def form_valid(self, form):
         form.clean_email()
         form.clean_password2()
         form.save()
+
+        # Generate parameters for send email
+        import hashlib, datetime, random
+        username = form.cleaned_data['username']
+        email = form.cleaned_data['email']
+        activation_key = hashlib.sha1(str(random.random()).encode()+email.encode()).hexdigest()
+        key_expires = datetime.datetime.today() + datetime.timedelta(2)
+        user = User.objects.get(username=username)
+
+        # Create UserProfile with parameters ^
+        user_profile = UserProfile(user=user, activation_key=activation_key,
+                                   key_expires=key_expires)
+        user_profile.save()
+
+        # Send email
+        from django.core.mail import send_mail
+        email_subject = 'Подтверждение регистрации'
+        email_body = '''Привет %s, спасибо за регистрацию! Осталось всего чуть-чуть,
+            перейди по ссылке:
+            http://127.0.0.1:8000/confim/%s''' % (username, activation_key)
+        send_mail(email_subject, email_body, 'blogdarkpy@gmail.com',
+                  [email], fail_silently=False)
+
         return super(RegisterView, self).form_valid(form)
+
+
+def reg_confim(request, activation_key):
+    if request.user.is_authenticated():
+        return HttpResponseRedirect('/')
+    user_profile = get_object_or_404(UserProfile,
+                                     activation_key=activation_key)
+    if user_profile.key_expires < timezone.now():
+        return HttpResponseRedirect('/error_expired')
+    user = user_profile.user
+    user.is_active = True
+    user.save()
+    return HttpResponseRedirect('/success_activated_account')
 
 
 class NewPostView(FormView):

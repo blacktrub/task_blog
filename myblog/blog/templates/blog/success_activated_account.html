@@ -1,0 +1,16 @@
+{% extends "blog/home.html" %}
+{% load staticfiles %}
+
+{% block title %}
+    Активация аккаунта
+{% endblock title %}
+
+{% block post %}
+    <div class="container">
+        <div class="text-center">
+            <h1>Вы успешно активировали аккаунт!</h1>
+            <p class="lead">Теперь вы можете <a href="{% url 'blog:login' %}">Войти</a> в блог</p>
+            <p class="lead"><a href="{% url 'blog:home' %}">На главную</a></p>
+        </div>
+    </div>
+{% endblock post %}

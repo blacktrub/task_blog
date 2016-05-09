@@ -19,4 +19,10 @@ urlpatterns = [
         name='editpost'),
     url(r'^edit/delete/(?P<pk>[0-9]+)/$', views.DeletePost, name='delete'),
     url(r'^edit/newpost/$', views.NewPostView.as_view(), name='newpost'),
+    url(r'^error_expired/$', views.error_expired),
+    url(r'^success_register_account/$',
+        views.success_register_account),
+    url(r'^success_activated_account/$',
+        views.success_activated_account),
+    url(r'^confim/(?P<activation_key>[a-zA-Z0-9_]+)/$', views.reg_confim),
 ]
