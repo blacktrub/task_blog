@@ -5,23 +5,32 @@
 {% endblock title %}
 
 {% block content %}
-  <div class="form-signin">
-    <form action="" method="post" class="form-sigin">
-    <h2 class="form-sigin-heading">Регистрация</h2>
-      {% csrf_token %}
-      <input id="id_username" maxlength="30" name="username" type="text" placeholder="Логин" class="form-control style-margin" required autofocus/>
-      <input id="id_email" maxlength="254" name="email" type="email" placeholder="Адрес электронной почты" class="form-control style-margin" required />
-      <input id="id_password1" name="password1" type="password" placeholder="Пароль" class="form-control style-margin" required />
-      <input id="id_password2" name="password2" type="password" placeholder="Повторите пароль" class="form-control style-margin" required />
-      <button class="btn btn-lg btn-primary btn-block" type="submit" >Регистрация</button>
-    </form>
-    <form action="{% url 'blog:home' %}">
-      <input type="submit" value="На главную" class="btn btn-lg btn-primary btn-block style-margin">
-    </form>
+  {% if request.user.is_authenticated %}
+    <div class="container">
+      <div class="text-center">
+        <h2>Упс! Вы уже авторизованы</h2>
+        <p class="lead">Если вам нужно зарегистрировать ещё раз, сначала нужно <a href="{% url 'blog:logout' %}">Выйти</a></p>
+        <p class="lead"><a href="{% url 'blog:home' %}">На главную</a></p>
+      </div>
+    </div>
+  {% else %}  
+    <div class="form-signin">
+      <form action="" method="post" class="form-sigin">
+      <h2 class="form-sigin-heading">Регистрация</h2>
+        {% csrf_token %}
+        <input id="id_username" maxlength="30" name="username" type="text" placeholder="Логин" class="form-control style-margin" required autofocus/>
+        <input id="id_email" maxlength="254" name="email" type="email" placeholder="Адрес электронной почты" class="form-control style-margin" required />
+        <input id="id_password1" name="password1" type="password" placeholder="Пароль" class="form-control style-margin" required />
+        <input id="id_password2" name="password2" type="password" placeholder="Повторите пароль" class="form-control style-margin" required />
+        <button class="btn btn-lg btn-primary btn-block" type="submit" >Регистрация</button>
+      </form>
+      <form action="{% url 'blog:home' %}">
+        <input type="submit" value="На главную" class="btn btn-lg btn-primary btn-block style-margin">
+      </form>
 
-    {% if form.errors %}
-      {{ form.errors }}
-    {% endif %}
-
+      {% if form.errors %}
+        {{ form.errors }}
+      {% endif %}
+  {% endif %}
   </div>
 {% endblock content %}

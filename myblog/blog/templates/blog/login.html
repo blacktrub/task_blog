@@ -20,18 +20,28 @@
   <body>
 
   {% block content %}
-    <div class="form-signin">
-      <form action='.' method='post' class="form-sigin" role="form">
-        {% csrf_token %}
-        <h2 class="form-signin-heading">Войти в блог:</h2>
-        <input type="text" name="username" value="" id="username" class="form-control style-margin" placeholder="Ваш логин" required autofocus>
-        <input type="password" name="password" value="" id="password" class="form-control style-margin" placeholder="Ваш пароль" required>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
-        <input type="hidden" name="next" value="{{ next|escape }}" />
-      </form>
-      <form action="{% url 'blog:home' %}">
-        <input type="submit" value="На главную" class="btn btn-lg btn-primary btn-block style-margin">
-      </form>
+  {% if request.user.is_authenticated %}
+    <div class="container">
+      <div class="text-center">
+        <h2>Упс! Вы уже авторизованы</h2>
+        <p class="lead">Если вам нужно авторизоваться заново сначала нужно <a href="{% url 'blog:logout' %}">Выйти</a></p>
+        <p class="lead"><a href="{% url 'blog:home' %}">На главную</a></p>
+      </div>
+    </div>
+  {% else %}  
+      <div class="form-signin">
+        <form action='.' method='post' class="form-sigin" role="form">
+          {% csrf_token %}
+          <h2 class="form-signin-heading">Войти в блог:</h2>
+          <input type="text" name="username" value="" id="username" class="form-control style-margin" placeholder="Ваш логин" required autofocus>
+          <input type="password" name="password" value="" id="password" class="form-control style-margin" placeholder="Ваш пароль" required>
+          <button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
+          <input type="hidden" name="next" value="{{ next|escape }}" />
+        </form>
+        <form action="{% url 'blog:home' %}">
+          <input type="submit" value="На главную" class="btn btn-lg btn-primary btn-block style-margin">
+        </form>
+      {% endif %}
     {% if form.errors %}
       <div class="form-signin">
         <p class="alert alert-danger">Сожалеем, вы неправильно ввели логин или пароль</p>
