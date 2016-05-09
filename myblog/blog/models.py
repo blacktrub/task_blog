@@ -28,4 +28,4 @@ class Article(models.Model):
 
 class CountArticle(models.Model):
     user = models.OneToOneField(User)
-    count = models.ManyToManyField(Article)
+    count_article = models.ManyToManyField(Article)

@@ -15,118 +15,114 @@
     
 </head>
 <body>
-    {% block header %}
-      <div class="container-fluit">
-          <div class="row">
-              <div class="navbar navbar-inverse navbar-fixed-top">
-                  <div class="container">
-                      
-                      <ul class="nav navbar-nav navbar-right">
-          
-                        <li class="dropdown">
-                          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Аккаунт <span class="caret"></span></a>
-                          <ul class="dropdown-menu" role="menu">
-                            {% if user.username %}
-                              <li><a>Вы зашли как: {{user.username}}</a></li>
-                              <li><a href="{% url 'blog:logout' %}">Выйти</a></li>
-                              <li class="divider"></li>
-                              <li><a>Непрочитанных постов: {{total_count}}</a></li>
-                              <li class="divider"></li>
-                            {% else %}
-                              <li><a href="{% url 'blog:login' %}">Войти</a></li>
-                              <li><a href="{% url 'blog:reg' %}">Регистрация</a></li>
-                              <li class="divider"></li>  
-                            {% endif %}
-                            <li><a href="{% url 'blog:home' %}">На главную</a></li>
-                          </ul>
-                        </li>
-
-                      </ul>
-
-                      <div class="collapse navbar-collapse">
-                          <ul class="nav navbar-nav">
-                              <li><a href="{% url 'blog:home' %}">Блог</a></li>
-                              {% if request.user.is_authenticated %}
-                                <li><a href="{% url 'blog:edit' %}">Мои посты</a></li>
-                                <li><a href="{% url 'blog:newpost' %}">Новый пост</a></li>
-                                <li><a href="{% url 'blog:logout' %}">Выйти</a></li>
-                              {% else %}
-                                <li><a href="{% url 'blog:login' %}">Войти</a></li>
-                                <li><a href="{% url 'blog:reg' %}">Регистрация</a></li>
-                              {% endif %}
-                          </ul>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </div>
-    {% endblock header %}
-
-    {% block post %}
-      {% if post_blog %}
-        <div class="container blog-post">
-          <div class="row">
-              <div class="col-lg-8 col-md-8">
-                        {% for x in post_blog %}
-                            <div>
-                                <h2 class="article-title">
-                                    <a class="article-title" href="{% url 'blog:full' x.id %}"> {{ x.article_title }} </a>
-                                </h2>
-                            </div>
-                            <h6>
-                                <b>Создан:</b> {{ x.article_date_create }} 
-                                <b>Автор:</b> {{ x.article_autor }} 
-                                <b>Категории:</b> 
-                                {% for tag in x.article_tag.all %}
-                                    {{ tag }}
-                                {% endfor %}
-                                {% if x.article_access %}
-                                  <b>Открытый пост</b>
-                                {% else %}
-                                  <b>Закрытый пост</b>
-                                {% endif %}
-                            </h6>
-                            <div class="jumbotron">
-                                <p class="text-justify">
-                                    {{ x.article_text|linebreaksbr|urlize|truncatewords_html:20 }}
-                                </p>
-                                <a href="{% url 'blog:full' x.id %}">Читать далее...</a>
-                            </div>
-                        {% endfor %}
+  {% block header %}
+    <div class="container-fluit">
+      <div class="row">
+        <div class="navbar navbar-inverse navbar-fixed-top">
+          <div class="container">
+            <ul class="nav navbar-nav navbar-right">
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Аккаунт <span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                  {% if user.username %}
+                    <li><a>Вы зашли как: {{user.username}}</a></li>
+                    <li><a href="{% url 'blog:logout' %}">Выйти</a></li>
+                    <li class="divider"></li>
+                    <li><a>Непрочитанных постов: {{total_count}}</a></li>
+                    <li class="divider"></li>
+                  {% else %}
+                    <li><a href="{% url 'blog:login' %}">Войти</a></li>
+                    <li><a href="{% url 'blog:reg' %}">Регистрация</a></li>
+                    <li class="divider"></li>  
+                  {% endif %}
+                  <li><a href="{% url 'blog:home' %}">На главную</a></li>
+                </ul>
+              </li>
+            </ul>
+            <div class="collapse navbar-collapse">
+              <ul class="nav navbar-nav">
+                <li><a href="{% url 'blog:home' %}">Блог</a></li>
+                {% if request.user.is_authenticated %}
+                  <li><a href="{% url 'blog:edit' %}">Мои посты</a></li>
+                  <li><a href="{% url 'blog:newpost' %}">Новый пост</a></li>
+                  <li><a href="{% url 'blog:logout' %}">Выйти</a></li>
+                {% else %}
+                  <li><a href="{% url 'blog:login' %}">Войти</a></li>
+                  <li><a href="{% url 'blog:reg' %}">Регистрация</a></li>
+                {% endif %}
+              </ul>
             </div>
           </div>
         </div>
-    {% endif %}
-    {% endblock post %}
-
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="{% static "blog/js/bootstrap.js" %}"></script>
-
-    {% block footer %}
-      <div class="blog-footer">
-        <a href="https://vk.com/blacktrub">
-            <img src="{% static "blog/image/ico-vkontakte.png" %}">
-        </a>
-        <a href="https://twitter.com/BlackTrub">
-            <img src="{% static "blog/image/ico-twitter.png" %}">
-        </a>
-        <a href="https://www.facebook.com/blacktrub">
-            <img src="{% static "blog/image/ico-facebook.png" %}">
-        </a>
-        <a href="https://www.github.com/blacktrub">
-            <img src="{% static "blog/image/github.png" %}">
-        </a>
-        <p>
-            <b>Дмитрий Антонов ©</b>
-        </p>
-        <p>
-            <b>2016</b>
-        </p>
-        <p>
-          <a href="#">Back to top</a>
-        </p>
+      </div>
     </div>
-    {% endblock footer %}  
+  {% endblock header %}
+
+  {% block post %}
+    {% if post_blog %}
+      <div class="container blog-post">
+        <div class="row">
+          <div class="col-lg-8 col-md-8">
+            {% for x in post_blog %}
+              <div>
+                <h2 class="article-title">
+                  <a class="article-title" href="{% url 'blog:full' x.id %}"> {{ x.article_title }} </a>
+                </h2>
+              </div>
+              <h6>
+                <b>Создан:</b> {{ x.article_date_create }} 
+                <b>Автор:</b> {{ x.article_autor }} 
+                <b>Категории:</b> 
+                {% for tag in x.article_tag.all %}
+                  {{ tag }}
+                {% endfor %}
+                {% if x.article_access %}
+                  <b>Открытый пост</b>
+                {% else %}
+                  <b>Закрытый пост</b>
+                {% endif %}
+              </h6>
+              <div class="jumbotron">
+                <p class="text-justify">
+                  {{ x.article_text|linebreaksbr|urlize|truncatewords_html:20 }}
+                </p>
+                <a href="{% url 'blog:full' x.id %}">Читать далее...</a>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  {% endblock post %}
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="{% static "blog/js/bootstrap.js" %}"></script>
+
+  {% block footer %}
+    <div class="blog-footer">
+      <a href="https://vk.com/blacktrub">
+        <img src="{% static "blog/image/ico-vkontakte.png" %}">
+      </a>
+      <a href="https://twitter.com/BlackTrub">
+        <img src="{% static "blog/image/ico-twitter.png" %}">
+      </a>
+      <a href="https://www.facebook.com/blacktrub">
+        <img src="{% static "blog/image/ico-facebook.png" %}">
+      </a>
+      <a href="https://www.github.com/blacktrub">
+        <img src="{% static "blog/image/github.png" %}">
+      </a>
+      <p>
+        <b>Дмитрий Антонов ©</b>
+      </p>
+      <p>
+        <b>2016</b>
+      </p>
+      <p>
+        <a href="#">Back to top</a>
+      </p>
+    </div>
+  {% endblock footer %}  
 </body>
 </html>
