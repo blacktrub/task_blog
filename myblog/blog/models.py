@@ -27,6 +27,5 @@ class Article(models.Model):
 
 
 class CountArticle(models.Model):
-    id = models.AutoField(primary_key=True)
     user = models.OneToOneField(User)
     count = models.ManyToManyField(Article)

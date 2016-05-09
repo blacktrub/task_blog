@@ -8,8 +8,6 @@ from django.contrib.auth.views import login, logout
 urlpatterns = [
     url(r'^$', views.HomeView.as_view(), name='home'),
     url(r'^(?P<pk>[0-9]+)/$', views.FullView, name='full'),
-    url(r'^edit/(?P<pk>[0-9]+)/$', views.EditPostView.as_view(),
-        name='editpost'),
     url(r'^login/$', login, {'template_name': 'blog/login.html'},
         name='login'),
     url(r'^logout/$', logout, {'next_page': '/'}, name='logout'),
@@ -17,6 +15,8 @@ urlpatterns = [
     url(r'^access_error_to_post/$', views.Access_error_to_post),
     url(r'^access_error_to_modify/$', views.Access_error_to_modify),
     url(r'^edit/$', views.EditView.as_view(), name='edit'),
+    url(r'^edit/(?P<pk>[0-9]+)/$', views.EditPostView.as_view(),
+        name='editpost'),
     url(r'^edit/delete/(?P<pk>[0-9]+)/$', views.DeletePost, name='delete'),
     url(r'^edit/newpost/$', views.NewPostView.as_view(), name='newpost'),
 ]

@@ -24,7 +24,7 @@
 
             <div class="form-actions">
                 <button type="submit" class="btn btn-primary">Сохранить</button>
-                <button href="{% url 'blog:home' %}" type="button" class="btn">Отменить</button>
+                <button class="btn" onclick="location.href = '{% url 'blog:home' %}'">Отменить</button>
             </div>
             {{form.errors}}
         </form>

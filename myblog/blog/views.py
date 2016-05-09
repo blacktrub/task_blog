@@ -3,7 +3,7 @@
 from django.views import generic
 from .models import Article, Tags, CountArticle
 from .forms import RegisterForm, NewPostForm, EditPostForm
-from django.views.generic.edit import FormView, UpdateView, CreateView
+from django.views.generic.edit import FormView, UpdateView
 from django.shortcuts import get_object_or_404, render, redirect
 from .decorators import access_private_post
 from django.utils.decorators import method_decorator
@@ -44,7 +44,7 @@ class EditView(generic.ListView):
     context_object_name = 'edit_post'
 
     def get_queryset(self):
-        return Article.objects.all()
+        return Article.objects.order_by('-article_date_create').all()
 
     @method_decorator(login_required(redirect_field_name='',
                       login_url='/access_error_to_post'))
