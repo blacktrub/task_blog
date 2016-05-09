@@ -16,46 +16,44 @@
         <div class="container blog-post">
             <div class="row">
                 <div class="col-lg-8 col-md-8">
-                    {% if request.user == x.article_autor or request.user.is_superuser %}
-                        {% for x in edit_post %}
-                            <div>
-                                <h2 class="article-title">
-                                    <a class="article-title" href="{% url 'blog:full' x.id %}"> {{ x.article_title }} </a>
-                                </h2>
-                            </div>
-                            <h6>
-                                <b>Создан:</b> {{ x.article_date_create }} 
-                                <b>Автор:</b> {{ x.article_autor }} 
-                                <b>Категории:</b> 
-                                {% for tag in x.article_tag.all %}
-                                    {{ tag }}
-                                {% endfor %}
-                                {% if x.article_access %}
-                                    <b>Открытый пост</b>
-                                {% else %}
-                                    <b>Закрытый пост</b>
-                                {% endif %}
-                            </h6>
-                            <div class="jumbotron">
-                                <p class="text-justify">
-                                    {{ x.article_text|linebreaksbr|urlize|truncatewords_html:20 }}
-                                </p>
-                                <a href="{% url 'blog:full' x.id %}">Читать далее...</a>
-                            </div>
-                            <div class="form-actions">
-                                <button class="btn" onclick="location.href = '{% url 'blog:delete' x.id %}'">Удалить</button>
-                                <button class="btn" onclick="location.href = '{% url 'blog:editpost' x.id %}'">Изменить</button>
-                            </div>
-                        {% endfor %}
-                    {% else %}
-                        <div class="container">
-                            <div class="text-center">
-                                <h1>Упс! Вы ещё не написали не одной статьи</h1>
-                                <p class="lead">Готовы? <a href="{% url 'blog:newpost' %}">Создать</a></p>
-                            </div>
+                    {% for x in edit_post %}
+                        <div>
+                            <h2 class="article-title">
+                                <a class="article-title" href="{% url 'blog:full' x.id %}"> {{ x.article_title }} </a>
+                            </h2>
                         </div>
-                    {% endif %}
+                        <h6>
+                            <b>Создан:</b> {{ x.article_date_create }} 
+                            <b>Автор:</b> {{ x.article_autor }} 
+                            <b>Категории:</b> 
+                            {% for tag in x.article_tag.all %}
+                                {{ tag }}
+                            {% endfor %}
+                            {% if x.article_access %}
+                                <b>Открытый пост</b>
+                            {% else %}
+                                <b>Закрытый пост</b>
+                            {% endif %}
+                        </h6>
+                        <div class="jumbotron">
+                            <p class="text-justify">
+                                {{ x.article_text|linebreaksbr|urlize|truncatewords_html:20 }}
+                            </p>
+                            <a href="{% url 'blog:full' x.id %}">Читать далее...</a>
+                        </div>
+                        <div class="form-actions">
+                            <button class="btn" onclick="location.href = '{% url 'blog:delete' x.id %}'">Удалить</button>
+                            <button class="btn" onclick="location.href = '{% url 'blog:editpost' x.id %}'">Изменить</button>
+                        </div>
+                    {% endfor %}
                 </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="container">
+            <div class="text-center">
+                <h1>Упс! Вы ещё не написали не одной статьи</h1>
+                <p class="lead">Готовы? <a href="{% url 'blog:newpost' %}">Создать</a></p>
             </div>
         </div>
     {% endif %}

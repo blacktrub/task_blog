@@ -44,7 +44,10 @@ class EditView(generic.ListView):
     context_object_name = 'edit_post'
 
     def get_queryset(self):
-        return Article.objects.order_by('-article_date_create').all()
+        if self.request.user.is_superuser:
+            return Article.objects.all()
+        else:
+            return Article.objects.filter(article_autor=self.request.user).order_by('-article_date_create')
 
     @method_decorator(login_required(redirect_field_name='',
                       login_url='/access_error_to_post'))
@@ -95,8 +98,7 @@ class NewPostView(FormView):
             f.article_tag.add(tag_add)
 
         article = Article.objects.get(article_title=form.cleaned_data["article_title"])
-        count = CountArticle.objects.get(user=self.request.user)
-        article.countarticle_set.add(count)
+        article.countarticle_set.add(*list(CountArticle.objects.all()))
 
         form.save_m2m()
 
