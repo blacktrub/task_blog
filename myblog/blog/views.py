@@ -26,8 +26,9 @@ def FullView(request, pk):
     @access_private_post(url='/access_error_to_post',
                          access=obj.article_access)
     def view(request, obj):
-        count_object = CountArticle.objects.get(user=request.user)
-        count_object.count_article.remove(obj)
+        if request.user.is_authenticated():
+            count_object = CountArticle.objects.get(user=request.user)
+            count_object.count_article.remove(obj)
         return render(request, 'blog/full.html', {'fullpost_blog': obj})
 
     return view(request, obj)
