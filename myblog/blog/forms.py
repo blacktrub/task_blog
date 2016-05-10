@@ -7,6 +7,13 @@ from django.contrib.auth import password_validation
 from django import forms
 
 
+class RepeatEmailForm(ModelForm):
+
+    class Meta:
+        model = User
+        fields = ("email",)
+
+
 class EditPostForm(ModelForm):
 
     class Meta:

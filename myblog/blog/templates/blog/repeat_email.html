@@ -1,0 +1,34 @@
+{% extends "blog/login.html" %}
+
+{% block title %}
+    Повторная авторизация через email
+{% endblock title %}
+
+{% block content %}
+    {% if request.user.is_authenticated %}
+        <div class="container">
+          <div class="text-center">
+            <h2>Упс! Вы уже авторизованы</h2>
+            <p class="lead"><a href="{% url 'blog:home' %}">На главную</a></p>
+          </div>
+        </div>
+    {% else %}  
+      <div class="form-signin">
+        <form action='.' method='post' class="form-sigin" role="form">
+          {% csrf_token %}
+          <h2 class="form-signin-heading">Повторно выслать письмо:</h2>
+          <input type="text" name="email" value="" id="email" class="form-control style-margin" placeholder="Ваш email" required autofocus>
+          <button class="btn btn-lg btn-primary btn-block style-margin" type="submit">Выслать</button>
+          <input type="hidden" name="next" value="{{ next|escape }}" />
+        </form>
+        <form action="{% url 'blog:home' %}">
+          <input type="submit" value="На главную" class="btn btn-lg btn-primary btn-block style-margin">
+        </form>
+      {% endif %}
+    {% if form.errors %}
+      <div class="form-signin">
+        <p class="alert alert-danger">Вы не правильно ввели email, либо такой email не существует</p>
+      </div>
+    {% endif %}
+    </div>    
+{% endblock content %}

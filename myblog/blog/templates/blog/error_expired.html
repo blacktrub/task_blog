@@ -9,6 +9,9 @@
     <div class="container">
         <div class="text-center">
             <h1>Упс! Вышло время ключа активации</h1>
+            <p class="lead"> Вы можете 
+                <a href="{% url 'blog:repeat' %}">Повторно выслать письмо для авторизации</a>
+            </p>
             <p class="lead"><a href="{% url 'blog:home' %}">На главную</a></p>
         </div>
     </div>

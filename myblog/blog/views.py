@@ -3,7 +3,7 @@
 from django.views import generic
 from .models import Article, Tags, CountArticle, UserProfile
 from django.contrib.auth.models import User
-from .forms import RegisterForm, NewPostForm, EditPostForm
+from .forms import RegisterForm, NewPostForm, EditPostForm, RepeatEmailForm
 from django.views.generic.edit import FormView, UpdateView
 from django.shortcuts import get_object_or_404, render, redirect
 from .decorators import access_private_post
@@ -11,6 +11,7 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.utils import timezone
+from .tools import email_autentification
 
 
 class HomeView(generic.ListView):
@@ -94,29 +95,23 @@ class RegisterView(FormView):
         form.clean_password2()
         form.save()
 
-        # Generate parameters for send email
-        import hashlib, datetime, random
-        username = form.cleaned_data['username']
-        email = form.cleaned_data['email']
-        activation_key = hashlib.sha1(str(random.random()).encode()+email.encode()).hexdigest()
-        key_expires = datetime.datetime.today() + datetime.timedelta(2)
-        user = User.objects.get(username=username)
-
-        # Create UserProfile with parameters ^
-        user_profile = UserProfile(user=user, activation_key=activation_key,
-                                   key_expires=key_expires)
-        user_profile.save()
-
-        # Send email
-        from django.core.mail import send_mail
-        email_subject = 'Подтверждение регистрации'
-        email_body = '''Привет %s, спасибо за регистрацию! Осталось всего чуть-чуть,
-            перейди по ссылке:
-            http://127.0.0.1:8000/confim/%s''' % (username, activation_key)
-        send_mail(email_subject, email_body, 'blogdarkpy@gmail.com',
-                  [email], fail_silently=False)
+        user = User.objects.get(username=form.cleaned_data['username'])
+        email_autentification(user=user)
 
         return super(RegisterView, self).form_valid(form)
+
+
+class RepeatEmailView(FormView):
+    template_name = 'blog/repeat_email.html'
+    form_class = RepeatEmailForm
+    success_url = '/'
+
+    def form_valid(self, form):
+        user = User.objects.get(email=form.cleaned_data['email'])
+        if not user.is_active:
+            email_autentification(user=user, auth=True)
+
+        return super(RepeatEmailView, self).form_valid(form)
 
 
 def reg_confim(request, activation_key):
@@ -124,6 +119,8 @@ def reg_confim(request, activation_key):
         return HttpResponseRedirect('/')
     user_profile = get_object_or_404(UserProfile,
                                      activation_key=activation_key)
+    if user_profile.user.is_active:
+        return HttpResponseRedirect('/')
     if user_profile.key_expires < timezone.now():
         return HttpResponseRedirect('/error_expired')
     user = user_profile.user

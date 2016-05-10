@@ -25,4 +25,5 @@ urlpatterns = [
     url(r'^success_activated_account/$',
         views.success_activated_account),
     url(r'^confim/(?P<activation_key>[a-zA-Z0-9_]+)/$', views.reg_confim),
+    url(r'^repeat_email/$', views.RepeatEmailView.as_view(), name='repeat'),
 ]
