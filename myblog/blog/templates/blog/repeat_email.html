@@ -1,8 +1,15 @@
 {% extends "blog/login.html" %}
+{% load staticfiles %}
 
 {% block title %}
     Повторная авторизация через email
 {% endblock title %}
+
+{% block load_css %}
+    <link href="{% static 'blog/css/bootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'blog/css/signin.css' %}" rel="stylesheet">
+    <link href="{% static 'blog/css/login-margin.css' %}" rel="stylesheet">
+{% endblock load_css %}
 
 {% block content %}
     {% if request.user.is_authenticated %}
