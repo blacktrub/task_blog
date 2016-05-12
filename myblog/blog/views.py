@@ -168,6 +168,7 @@ class EditPostView(UpdateView):
     def form_valid(self, form):
         f = form.save(commit=False)
         f.article_date_modify = timezone.now()
+        f.article_tag = list(form.cleaned_data["article_tag"])
         f.save()
         return redirect(self.get_success_url())
 
