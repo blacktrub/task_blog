@@ -140,11 +140,7 @@ class NewPostView(FormView):
         f.article_access = form.cleaned_data["article_access"]
         f.article_autor = self.request.user
         f.save()
-
-        tags = form.cleaned_data['article_tag']
-        for tag in range(len(tags)):
-            tag_add = Tags.objects.get(tags_name=tags[tag])
-            f.article_tag.add(tag_add)
+        f.article_tag = list(form.cleaned_data['article_tag'])
 
         article = Article.objects.get(article_title=form.cleaned_data["article_title"])
         article.countarticle_set.add(*list(CountArticle.objects.all()))
