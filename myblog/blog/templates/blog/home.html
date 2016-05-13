@@ -41,6 +41,7 @@
             </ul>
             <div class="collapse navbar-collapse">
               <ul class="nav navbar-nav">
+                <li><a><img src="{% static 'blog/image/pycon.png' %}" width="25" height="25"></a><li>
                 <li><a href="{% url 'blog:home' %}">Блог</a></li>
                 {% if request.user.is_authenticated %}
                   <li><a href="{% url 'blog:edit' %}">Мои посты</a></li>
@@ -80,18 +81,18 @@
                   <a class="article-title" href="{% url 'blog:full' x.id %}"> {{ x.article_title }} </a>
                 </h2>
               </div>
-              <h6>
-                <b>Создан:</b> {{ x.article_date_create }} 
-                <b>Автор:</b> {{ x.article_autor }} 
+              <h6>|
+                <b>Создан:</b> {{ x.article_date_create }} |
+                <b>Автор:</b> {{ x.article_autor }} |
                 <b>Категории:</b> 
                 {% for tag in x.article_tag.all %}
                   {{ tag }}
-                {% endfor %}
+                {% endfor %}|
                 {% if x.article_access %}
                   <b>Открытый пост</b>
                 {% else %}
                   <b>Закрытый пост</b>
-                {% endif %}
+                {% endif %} |
               </h6>
               <div class="jumbotron">
                 <p class="text-justify">
