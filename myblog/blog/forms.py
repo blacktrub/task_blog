@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from .models import Article
 from django.contrib.auth import password_validation
 from django import forms
+from django_summernote.widgets import SummernoteWidget
 
 
 class RepeatEmailForm(ModelForm):
@@ -28,6 +29,9 @@ class NewPostForm(ModelForm):
         model = Article
         fields = ("article_title", "article_text",
                   "article_access", "article_tag")
+        widgets = {
+            'article_text': SummernoteWidget(),
+        }
 
     def save(self, commit=True):
         article = super(NewPostForm, self).save(commit=False)

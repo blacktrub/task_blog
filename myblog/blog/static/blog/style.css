@@ -16,6 +16,16 @@
 p.text-justify {
     font-size: 15px;
 }
+.jumbotron p {
+    font-size: 15px;
+}
+
+div.jumbotron {
+    padding-bottom: 15px;
+    padding-top: 15px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
 
 .text-center {
     text-align: center;

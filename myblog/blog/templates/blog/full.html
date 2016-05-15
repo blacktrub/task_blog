@@ -25,7 +25,7 @@
                     </h6>
                     <div class="jumbotron">
                         <p class="text-justify">
-                            {{ fullpost_blog.article_text|linebreaksbr|urlize }}
+                            {{ fullpost_blog.article_text|safe }}
                         </p>
                     </div>
                 </div>

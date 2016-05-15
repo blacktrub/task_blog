@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'blog'
+    'blog',
+    'django_summernote',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -136,3 +137,7 @@ EMAIL_HOST_PASSWORD = '197382fifty'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'blogdarkpy@gmail.com'
+
+# Summernote config
+
+SUMMERNOTE_CONFIG = {}
