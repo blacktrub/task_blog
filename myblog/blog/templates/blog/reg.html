@@ -18,9 +18,9 @@
       <form action="" method="post" class="form-sigin">
       <h2 class="form-sigin-heading">Регистрация</h2>
         {% csrf_token %}
-        <input id="id_username" maxlength="30" name="username" type="text" placeholder="Логин" class="form-control style-margin" required autofocus/>
-        <input id="id_email" maxlength="254" name="email" type="email" placeholder="Адрес электронной почты" class="form-control style-margin" required />
-        <input id="id_password1" name="password1" type="password" placeholder="Пароль" class="form-control style-margin" required />
+        <input id="id_username" maxlength="30" name="username" type="text" placeholder="Логин" class="form-control style-margin" required autofocus data-toogle="tooltip" title="150 знаков или меньше. Буквы, цифры и @/./+/-/_"/>
+        <input id="id_email" maxlength="254" name="email" type="email" placeholder="Адрес электронной почты" class="form-control style-margin" required/>
+        <input id="id_password1" name="password1" type="password" placeholder="Пароль" class="form-control style-margin" required data-toogle="tooltip" title="Минимум 8 знаков, цифры и буквы." />
         <input id="id_password2" name="password2" type="password" placeholder="Повторите пароль" class="form-control style-margin" required />
         <button class="btn btn-lg btn-primary btn-block" type="submit" >Регистрация</button>
       </form>
@@ -32,5 +32,12 @@
         {{ form.errors }}
       {% endif %}
   {% endif %}
-  </div>
+    </div>
+
+  <script type="text/javascript">
+    $(function() {
+      $('[data-toggle="tooltip"]').tooltip();
+    });
+  </script>
+
 {% endblock content %}
