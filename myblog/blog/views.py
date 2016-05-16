@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 from django.views import generic
-from .models import Article, Tags, CountArticle, UserProfile
+from .models import Article, CountArticle, UserProfile
 from django.contrib.auth.models import User
 from .forms import RegisterForm, NewPostForm, EditPostForm, RepeatEmailForm
 from django.views.generic.edit import FormView, UpdateView
