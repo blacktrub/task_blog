@@ -18,10 +18,10 @@ pip install -r requirements.txt
 
 Init and apply migrations to db:
 ```commandline
-python myblog/manage.py migrate
+python manage.py migrate
 ```
 
 And you already may run server:
 ```commandline
-python myblog/manage.py runserver
+python manage.py runserver
 ```
