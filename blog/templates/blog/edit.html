@@ -19,17 +19,17 @@
                     {% for x in edit_post %}
                         <div>
                             <h2 class="article-title">
-                                <a class="article-title" href="{% url 'blog:full' x.id %}"> {{ x.article_title }} </a>
+                                <a class="article-title" href="{% url 'blog:full' x.id %}"> {{ x.title }} </a>
                             </h2>
                         </div>
                         <h6>|
-                            <b>Создан:</b> {{ x.article_date_create }} |
-                            <b>Автор:</b> {{ x.article_autor }} |
+                            <b>Создан:</b> {{ x.created }} |
+                            <b>Автор:</b> {{ x.author }} |
                             <b>Категории:</b> 
-                            {% for tag in x.article_tag.all %}
+                            {% for tag in x.tags.all %}
                                 {{ tag }}
                             {% endfor %}|
-                            {% if x.article_access %}
+                            {% if x.is_private %}
                                 <b>Открытый пост</b>
                             {% else %}
                                 <b>Закрытый пост</b>
@@ -37,7 +37,7 @@
                         </h6>
                         <div class="jumbotron">
                             <p class="text-justify">
-                                {{ x.article_text|safe|truncatewords_html:20 }}
+                                {{ x.text|safe|truncatewords_html:20 }}
                             </p>
                             <a href="{% url 'blog:full' x.id %}">Читать далее...</a>
                         </div>

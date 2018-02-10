@@ -19,18 +19,18 @@ class EditPostForm(ModelForm):
 
     class Meta:
         model = Article
-        fields = ("article_title", "article_text",
-                  "article_access", "article_tag")
+        fields = ("title", "text",
+                  "is_private", "tags")
 
 
 class NewPostForm(ModelForm):
 
     class Meta:
         model = Article
-        fields = ("article_title", "article_text",
-                  "article_access", "article_tag")
+        fields = ("title", "text",
+                  "is_private", "tags")
         widgets = {
-            'article_text': SummernoteWidget(),
+            "text": SummernoteWidget(),
         }
 
     def save(self, commit=True):

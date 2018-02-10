@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 from django.views import generic
-from .models import Article, CountArticle, UserProfile
+from .models import Article, CountArticle, Profile
 from django.contrib.auth.models import User
 from .forms import RegisterForm, NewPostForm, EditPostForm, RepeatEmailForm
 from django.views.generic.edit import FormView, UpdateView
@@ -11,7 +11,7 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.utils import timezone
-from .tools import email_autentification
+from .tools import send_email_auth
 
 
 class HomeView(generic.ListView):
@@ -19,28 +19,27 @@ class HomeView(generic.ListView):
     context_object_name = 'post_blog'
 
     def get_queryset(self):
-        return Article.objects.order_by('-article_date_create').all()
+        return Article.objects.order_by('-created').all()
 
 
-def FullView(request, pk):
+def article_detail(request, pk):
     obj = get_object_or_404(Article, pk=pk)
 
-    @access_private_post(url='/access_error_to_post',
-                         access=obj.article_access)
+    @access_private_post(url='/access_error_to_post', access=obj.is_private)
     def view(request, obj):
         if request.user.is_authenticated():
             count_object = CountArticle.objects.get(user=request.user)
-            count_object.count_article.remove(obj)
+            count_object.count.remove(obj)
         return render(request, 'blog/full.html', {'fullpost_blog': obj})
 
     return view(request, obj)
 
 
-def Access_error_to_post(request):
+def access_error_to_post(request):
     return render(request, 'blog/access_error_to_post.html')
 
 
-def Access_error_to_modify(request):
+def access_error_to_modify(request):
     return render(request, 'blog/access_error_to_modify.html')
 
 
@@ -62,9 +61,10 @@ class EditView(generic.ListView):
 
     def get_queryset(self):
         if self.request.user.is_superuser:
-            return Article.objects.order_by('-article_date_create').all()
+            return Article.objects.order_by('-created').all()
         else:
-            return Article.objects.filter(article_autor=self.request.user).order_by('-article_date_create')
+            return Article.objects.filter(author=self.request.user)\
+                .order_by('-created')
 
     @method_decorator(login_required(redirect_field_name='',
                       login_url='/access_error_to_post'))
@@ -74,12 +74,12 @@ class EditView(generic.ListView):
 
 @login_required(redirect_field_name='',
                 login_url='/access_error_to_post')
-def DeletePost(request, pk):
+def delete_article(request, pk):
     article = Article.objects.get(pk=pk)
     if request.user.is_superuser:
         article.delete()
         return HttpResponseRedirect('/edit')
-    elif request.user == article.article_autor:
+    elif request.user == article.author:
         article.delete()
         return HttpResponseRedirect('/edit')
     return HttpResponseRedirect('/access_error_to_modify')
@@ -96,7 +96,7 @@ class RegisterView(FormView):
         form.save()
 
         user = User.objects.get(username=form.cleaned_data['username'])
-        email_autentification(user=user)
+        send_email_auth(user=user)
 
         return super(RegisterView, self).form_valid(form)
 
@@ -109,15 +109,15 @@ class RepeatEmailView(FormView):
     def form_valid(self, form):
         user = User.objects.get(email=form.cleaned_data['email'])
         if not user.is_active:
-            email_autentification(user=user, auth=True)
+            send_email_auth(user=user, auth=True)
 
         return super(RepeatEmailView, self).form_valid(form)
 
 
-def reg_confim(request, activation_key):
+def confirm_registration(request, activation_key):
     if request.user.is_authenticated():
         return HttpResponseRedirect('/')
-    user_profile = get_object_or_404(UserProfile,
+    user_profile = get_object_or_404(Profile,
                                      activation_key=activation_key)
     if user_profile.user.is_active:
         return HttpResponseRedirect('/')
@@ -135,14 +135,14 @@ class NewPostView(FormView):
 
     def form_valid(self, form):
         f = form.save(commit=False)
-        f.article_title = form.cleaned_data["article_title"]
-        f.article_text = form.cleaned_data["article_text"]
-        f.article_access = form.cleaned_data["article_access"]
-        f.article_autor = self.request.user
+        f.title = form.cleaned_data["title"]
+        f.text = form.cleaned_data["text"]
+        f.is_private = form.cleaned_data["is_private"]
+        f.author = self.request.user
         f.save()
-        f.article_tag = list(form.cleaned_data['article_tag'])
+        f.tags = list(form.cleaned_data["tags"])
 
-        article = Article.objects.get(article_title=form.cleaned_data["article_title"])
+        article = Article.objects.get(article_title=form.cleaned_data["title"])
         article.countarticle_set.add(*list(CountArticle.objects.all()))
 
         form.save_m2m()
@@ -163,8 +163,8 @@ class EditPostView(UpdateView):
 
     def form_valid(self, form):
         f = form.save(commit=False)
-        f.article_date_modify = timezone.now()
-        f.article_tag = list(form.cleaned_data["article_tag"])
+        f.modified = timezone.now()
+        f.tags = list(form.cleaned_data["tags"])
         f.save()
         return redirect(self.get_success_url())
 

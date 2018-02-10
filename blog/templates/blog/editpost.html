@@ -11,11 +11,11 @@
             <h2 class="form-signin-heading">Изменить пост</h2>
 
             <p><label for="id_article_title">Заголовок статьи</label></p>
-            <p><input value="{{form.article_title.value}}" id="id_article_title" maxlength="100" name="article_title" type="text" required autofocus/></p>
+            <p><input value="{{form.title.value}}" id="id_article_title" maxlength="100" name="article_title" type="text" required autofocus/></p>
 
             <p><label for="id_article_text">Основной текст:</label></p>
             <p>
-                <textarea cols="40" id="id_article_text" name="article_text" rows="10" required>{{form.article_text.value}}</textarea>
+                <textarea cols="40" id="id_article_text" name="article_text" rows="10" required>{{form.text.value}}</textarea>
                 <script>
                     var settings_id_article_text = {"width": 720, "url": {"upload_attachment": "/summernote/upload_attachment/"}, "lang": "en-US", "height": 480, "toolbar": [["style", ["style"]], ["font", ["bold", "italic", "underline", "superscript", "subscript", "strikethrough", "clear"]], ["fontname", ["fontname"]], ["fontsize", ["fontsize"]], ["color", ["color"]], ["para", ["ul", "ol", "paragraph"]], ["height", ["height"]], ["table", ["table"]], ["insert", ["link", "picture", "video", "hr"]], ["view", ["fullscreen", "codeview"]], ["help", ["help"]]]};
                 </script>
@@ -23,13 +23,13 @@
             </p>
 
             <p><label for="id_article_access">Статья в открытом доступе:</label>
-            <input id="id_article_access" name="article_access" type="checkbox" 
-            {% if form.article_access.value %}
+            <input id="id_article_access" name="is_private" type="checkbox"
+            {% if form.is_private.value %}
                 checked 
             {% endif %}/></p>
 
             <p><label for="id_article_tags">Теги статьи:</label>
-            {{ form.article_tag }}</p>
+            {{ form.tags }}</p>
 
             <div class="form-actions">
                 <button type="submit" class="btn btn-primary">Сохранить</button>
